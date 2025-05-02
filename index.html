@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Happy Birthday, My Love</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fbeaff;
+      overflow: hidden;
+    }
+
+    .card-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 1500px;
+    }
+
+    .card {
+      width: 500px;
+      height: 300px;
+      position: relative;
+      transform-style: preserve-3d;
+      transform: rotateY(0deg);
+      transition: transform 2s ease-in-out;
+      cursor: pointer;
+    }
+
+    .card.opened {
+      transform: rotateY(180deg);
+    }
+
+    .front, .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .front {
+      background: linear-gradient(to right, #ff85a2, #ffdde1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: white;
+    }
+
+    .back {
+      background: white;
+      transform: rotateY(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    #slideshow {
+      display: none;
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      background: #fff5f8;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 10;
+      padding: 20px;
+    }
+
+    #slideshow img {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    #quote {
+      font-size: 1.2rem;
+      color: #e91e63;
+      text-align: center;
+      max-width: 80%;
+    }
+
+    #note-container {
+      display: none;
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      background: #fff0f6;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      text-align: center;
+      font-size: 1.5rem;
+      color: #d81b60;
+    }
+
+    #note-text {
+      white-space: pre-wrap;
+      border-right: 2px solid #d81b60;
+      font-family: 'Courier New', Courier, monospace;
+    }
+  </style>
+</head>
+<body>
+
+<audio id="bg-music" src="/audio/ha.mp3"></audio>
+
+<div class="card-container">
+  <div class="card" id="birthdayCard">
+    <div class="front">🎂 Tap to Open</div>
+    <div class="back">❤️ Happy Birthday! ❤️</div>
+  </div>
+</div>
+
+<div id="slideshow" class="flex">
+  <img id="slide-img" src="" alt="Love Slide" />
+  <div id="quote"></div>
+</div>
+
+<div id="note-container" class="flex">
+  <div id="note-text"></div>
+</div>
+
+<script>
+  const card = document.getElementById("birthdayCard");
+  const slideshow = document.getElementById("slideshow");
+  const slideImg = document.getElementById("slide-img");
+  const quote = document.getElementById("quote");
+  const noteContainer = document.getElementById("note-container");
+  const noteText = document.getElementById("note-text");
+  const bgMusic = document.getElementById("bg-music");
+
+  const slides = [
+    { img: "/images/image1sml.jpg", quote: "Your smile is my favorite sunrise." },
+    { img: "/images/img3.jpg", quote: "Every moment with you is a blessing." },
+    { img: "/images/img2.jpg", quote: "I love you more than words can say." },
+    // Add more {img: "...", quote: "..."} as needed
+  ];
+
+  const finalNote = `Happy Birthday to you, my queen ❤️
+
+From the moment I met you, my world changed. You're the light in my darkest days, the calm in my chaos, and the reason behind my smile.
+
+On your special day, I just want you to know how deeply I love you.
+
+Forever yours 💕`;
+
+  card.addEventListener("click", () => {
+    card.classList.add("opened");
+    setTimeout(startSlideshow, 3000);
+    bgMusic.play();
+  });
+
+  let current = 0;
+
+  function startSlideshow() {
+    document.querySelector(".card-container").style.display = "none";
+    slideshow.style.display = "flex";
+    showSlide();
+  }
+
+  function showSlide() {
+    if (current >= slides.length) {
+      slideshow.style.display = "none";
+      showNote();
+      return;
+    }
+
+    slideImg.src = slides[current].img;
+    quote.textContent = slides[current].quote;
+    current++;
+
+    setTimeout(showSlide, 4000); // Change every 3.5s
+  }
+
+  function showNote() {
+    noteContainer.style.display = "flex";
+    typeNote(finalNote, 0);
+  }
+
+  function typeNote(text, i) {
+    if (i < text.length) {
+      noteText.textContent += text.charAt(i);
+      setTimeout(() => typeNote(text, i + 1), 50);
+    } else {
+      noteText.style.borderRight = "none";
+    }
+  }
+</script>
+</body>
+</html>
